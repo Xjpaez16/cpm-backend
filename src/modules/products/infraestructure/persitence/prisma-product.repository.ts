@@ -5,7 +5,7 @@ import { PrismaService } from 'src/core/prisma.service';
 
 @Injectable()
 export class PrismaProductRepository implements IProductRepository {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async save(product: Product): Promise<void> {
     await this.prismaService.product.create({
@@ -22,6 +22,56 @@ export class PrismaProductRepository implements IProductRepository {
           })),
         },
       },
+    });
+  }
+
+  async findById(id: string): Promise<Product | null> {
+    const item = await this.prismaService.product.findUnique({
+      where: { id },
+      include: {
+        images: true,
+      },
+    });
+
+    if (!item) return null;
+
+    return new Product(
+      item.id,
+      item.name,
+      Number(item.price),
+      item.stock,
+      item.description || '',
+      item.images.map((image) => ({
+        url: image.url,
+        publicId: image.publicId,
+      })),
+      item.createdAt,
+      item.isActive,
+    );
+  }
+
+  async update(id: string, product: Product): Promise<void> {
+    const data: any = {
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      description: product.description,
+      isActive: product.isActive,
+    };
+
+    if (product.images.length > 0) {
+      data.images = {
+        deleteMany: {},
+        create: product.images.map((img) => ({
+          url: img.url,
+          publicId: img.publicId,
+        })),
+      };
+    }
+
+    await this.prismaService.product.update({
+      where: { id },
+      data: data,
     });
   }
 

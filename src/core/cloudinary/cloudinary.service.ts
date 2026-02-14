@@ -6,8 +6,8 @@ import { CLOUDINARY_CONNECTOR } from './cloudinary.provider';
 @Injectable()
 export class CloudinaryService {
 
-  constructor(@Inject(CLOUDINARY_CONNECTOR) private readonly connector) {}
-  
+  constructor(@Inject(CLOUDINARY_CONNECTOR) private readonly connector) { }
+
   async uploadFile(
     file: Express.Multer.File,
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
@@ -32,6 +32,15 @@ export class CloudinaryService {
       );
 
       upload.end(file.buffer);//se envia el archivo desde la memoria
+    });
+  }
+
+  async deleteFile(publicId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.destroy(publicId, (error, result) => {
+        if (error) return reject(error);
+        resolve();
+      });
     });
   }
 }
