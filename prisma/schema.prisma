@@ -17,6 +17,7 @@ model Product {
   isActive    Boolean  @default(true)
   images      Image[]
   createdAt   DateTime @default(now())
+  invoiceItems InvoiceItem[]
 }
 
 model Image {
@@ -25,4 +26,40 @@ model Image {
   publicId  String  // ID interno de Cloudinary para poder borrarla después
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  phone     String?
+  createdAt DateTime  @default(now())
+  invoices  Invoice[]
+}
+
+model Invoice {
+  id          String        @id @default(uuid())
+  invoiceDate DateTime      @default(now())
+  total       Decimal       @db.Decimal(10, 2)
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id])
+  items       InvoiceItem[]
+}
+
+model InvoiceItem {
+  id        String  @id @default(uuid())
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
 }
