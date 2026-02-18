@@ -21,5 +21,6 @@ import { ClientController } from './presentation/client.controller';
         CreateClientUseCase,
         ToggleClientStatusUseCase,
     ],
+    exports: ['IClientRepository'],
 })
 export class ClientModule { }

@@ -27,7 +27,7 @@ import { CloudinaryModule } from "src/core/cloudinary/cloudinary.module";
             useClass: PrismaProductRepository,
         }
     ],
-
+    exports: ['IProductRepository'],
 })
 
 export class ProductModule { }
