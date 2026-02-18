@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductModule } from './modules/products/product.module';
 import { ConfigModule } from '@nestjs/config';
+import { ClientModule } from './modules/clients/client.module';
 
 @Module({
   imports: [
@@ -10,7 +11,9 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    ProductModule],
+    ProductModule,
+    ClientModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
