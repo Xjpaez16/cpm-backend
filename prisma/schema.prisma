@@ -29,14 +29,17 @@ model Image {
 }
 
 model Client {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  phone     String?
-  address   String?
-  isActive    Boolean  @default(true)
-  createdAt DateTime  @default(now())
-  invoices  Invoice[]
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  password          String
+  resetToken        String?
+  resetTokenExpires DateTime?
+  phone             String?
+  address           String?
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  invoices          Invoice[]
 }
 
 model Invoice {

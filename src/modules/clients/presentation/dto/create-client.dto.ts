@@ -24,6 +24,10 @@ export class CreateClientDto {
     phone: string;
 
     @IsString()
+    @IsNotEmpty({ message: 'La contraseña es obligatoria' })
+    password: string;
+
+    @IsString()
     @IsNotEmpty({ message: 'La dirección del cliente es obligatoria' })
     @MaxLength(200, { message: 'La dirección es muy larga (máximo 200 caracteres)' })
     address: string;

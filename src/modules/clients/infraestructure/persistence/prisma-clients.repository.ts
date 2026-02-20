@@ -16,6 +16,7 @@ export class PrismaClientRepository implements IClientRepository {
                     id: client.id,
                     name: client.name,
                     email: client.email,
+                    password: client.password,
                     phone: client.phone,
                     address: client.address,
                     isActive: client.isActive,
@@ -39,6 +40,9 @@ export class PrismaClientRepository implements IClientRepository {
                     item.id,
                     item.name,
                     item.email,
+                    item.password,
+                    item.resetToken,
+                    item.resetTokenExpires,
                     item.phone || '',
                     item.address || '',
                     item.createdAt,
@@ -70,6 +74,9 @@ export class PrismaClientRepository implements IClientRepository {
             item.id,
             item.name,
             item.email,
+            item.password,
+            item.resetToken,
+            item.resetTokenExpires,
             item.phone || '',
             item.address || '',
             item.createdAt,
@@ -88,10 +95,75 @@ export class PrismaClientRepository implements IClientRepository {
             data: {
                 name: client.name,
                 email: client.email,
+                password: client.password,
+                resetToken: client.resetToken,
+                resetTokenExpires: client.resetTokenExpires,
                 phone: client.phone,
                 address: client.address,
                 isActive: client.isActive,
             },
         });
+    }
+
+    async findByEmail(email: string): Promise<Client | null> {
+        const item = await this.prismaService.client.findUnique({
+            where: { email },
+            include: {
+                invoices: {
+                    orderBy: {
+                        invoiceDate: 'desc',
+                    },
+                },
+            },
+        });
+        if (!item) return null;
+        return new Client(
+            item.id,
+            item.name,
+            item.email,
+            item.password,
+            item.resetToken,
+            item.resetTokenExpires,
+            item.phone || '',
+            item.address || '',
+            item.createdAt,
+            item.isActive,
+            item.invoices.map((inv) => ({
+                id: inv.id,
+                invoiceDate: inv.invoiceDate,
+                total: Number(inv.total),
+            })),
+        );
+    }
+
+    async findByResetToken(token: string): Promise<Client | null> {
+        const item = await this.prismaService.client.findFirst({
+            where: { resetToken: token },
+            include: {
+                invoices: {
+                    orderBy: {
+                        invoiceDate: 'desc',
+                    },
+                },
+            },
+        });
+        if (!item) return null;
+        return new Client(
+            item.id,
+            item.name,
+            item.email,
+            item.password,
+            item.resetToken,
+            item.resetTokenExpires,
+            item.phone || '',
+            item.address || '',
+            item.createdAt,
+            item.isActive,
+            item.invoices.map((inv) => ({
+                id: inv.id,
+                invoiceDate: inv.invoiceDate,
+                total: Number(inv.total),
+            })),
+        );
     }
 }
