@@ -9,13 +9,12 @@ import { LoginClientUseCase } from './applications/login-client.use-case';
 import { ClientController } from './presentation/client.controller';
 import { ForgotPasswordUseCase } from './applications/forgot-password.use-case';
 import { ResetPasswordUseCase } from './applications/reset-password.use-case';
-import { InvoiceModule } from '../invoices/invoice.module';
 import { MailModule } from '../mail/mail.module';
 import { AuthModule } from '../auth/auth.module';
 
 
 @Module({
-    imports: [InvoiceModule, MailModule, AuthModule],
+    imports: [MailModule, AuthModule],
     controllers: [ClientController],
     providers: [
         PrismaService,
@@ -24,7 +23,7 @@ import { AuthModule } from '../auth/auth.module';
             useClass: PrismaClientRepository,
         },
         GetClientsUseCase,
-        GetClientsUseCase,
+        UpdateClientUseCase,
         CreateClientUseCase,
         LoginClientUseCase,
         ToggleClientStatusUseCase,
