@@ -15,6 +15,7 @@ export class PrismaProductRepository implements IProductRepository {
         price: product.price,
         stock: product.stock,
         description: product.description,
+        category: product.category,
         images: {
           create: product.images.map((img) => ({
             url: img.url,
@@ -41,6 +42,7 @@ export class PrismaProductRepository implements IProductRepository {
       Number(item.price),
       item.stock,
       item.description || '',
+      item.category || '',
       item.images.map((image) => ({
         url: image.url,
         publicId: image.publicId,
@@ -56,6 +58,7 @@ export class PrismaProductRepository implements IProductRepository {
       price: product.price,
       stock: product.stock,
       description: product.description,
+      category: product.category,
       isActive: product.isActive,
     };
 
@@ -92,6 +95,7 @@ export class PrismaProductRepository implements IProductRepository {
           Number(item.price),
           item.stock,
           item.description || '',
+          item.category || '',
           item.images.map((image) => ({
             url: image.url,
             publicId: image.publicId,

@@ -12,6 +12,7 @@ model Product {
   id          String   @id @default(uuid())
   name        String
   description String?
+  category    String?
   price       Decimal  @db.Decimal(10, 2)
   stock       Int      @default(0)
   isActive    Boolean  @default(true)
@@ -64,6 +65,7 @@ model InvoiceItem {
 model Admin {
   id        String   @id @default(uuid())
   username  String   @unique
+  email     String   @unique
   password  String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())

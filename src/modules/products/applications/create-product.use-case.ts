@@ -22,6 +22,7 @@ export class CreateProductUseCase {
             createdProductDto.price,
             createdProductDto.stock,
             createdProductDto.description,
+            createdProductDto.category,
             imagesData
         );
         // Guardamos el nuevo producto utilizando el repositorio.

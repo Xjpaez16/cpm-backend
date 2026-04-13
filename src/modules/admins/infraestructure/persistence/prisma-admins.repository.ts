@@ -17,6 +17,7 @@ export class PrismaAdminRepository implements IAdminRepository {
         return new Admin(
             item.id,
             item.username,
+            item.email,
             item.password,
             item.isActive,
             item.createdAt
@@ -33,6 +34,24 @@ export class PrismaAdminRepository implements IAdminRepository {
         return new Admin(
             item.id,
             item.username,
+            item.email,
+            item.password,
+            item.isActive,
+            item.createdAt
+        );
+    }
+
+    async findByEmail(email: string): Promise<Admin | null> {
+        const item = await this.prismaService.admin.findUnique({
+            where: { email },
+        });
+
+        if (!item) return null;
+
+        return new Admin(
+            item.id,
+            item.username,
+            item.email,
             item.password,
             item.isActive,
             item.createdAt

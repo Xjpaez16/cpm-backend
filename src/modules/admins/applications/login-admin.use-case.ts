@@ -13,7 +13,7 @@ export class LoginAdminUseCase {
     ) { }
 
     async execute(loginAdminDto: LoginAdminDto) {
-        const admin = await this.adminRepository.findByUsername(loginAdminDto.username);
+        const admin = await this.adminRepository.findByEmail(loginAdminDto.email);
 
         if (!admin || !admin.isActive) {
             throw new UnauthorizedException('Credenciales inválidas');
@@ -25,12 +25,12 @@ export class LoginAdminUseCase {
             throw new UnauthorizedException('Credenciales inválidas');
         }
 
-        const payload = { sub: admin.id, username: admin.username, role: 'admin' };
+        const payload = { sub: admin.id, email: admin.email, role: 'admin' };
         const token = this.jwtService.sign(payload);
 
         return {
             id: admin.id,
-            username: admin.username,
+            email: admin.email,
             token,
         };
     }

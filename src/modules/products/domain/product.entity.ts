@@ -6,6 +6,7 @@ export class Product{
         public price : number,
         public stock : number,
         public description ?: string,
+        public category ?: string,
         public images : {url : string, publicId: string}[] = [],
         public createdAt ?: Date,
         public isActive : boolean = true,
